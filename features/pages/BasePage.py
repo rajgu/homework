@@ -14,6 +14,6 @@ class BasePage(object):
 
     def __getattr__(self, attr):
         if attr in self.locators:
-        	return self.browser.find_element(*self.locators[attr])
+            return self.browser.find_element(*self.locators[attr])
         else:
-        	print("Locator: '{0}' does not exists".format(attr))
+            raise Exception("Locator: '{0}' does not exists".format(attr))

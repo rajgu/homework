@@ -2,25 +2,30 @@ from selenium import webdriver
 import os
 
 
-def before_scenario(context, scenario):
-
-    if 'BROWSER' in context.config.userdata.keys() and context.config.userdata['BROWSER']:
-        browser = context.config.userdata['BROWSER']
+def before_all(context):
+    context.options = {}
+    if 'browser' in context.config.userdata and context.config.userdata['browser'] is not None:
+        context.options['browser'] = context.config.userdata['browser']
     else:
-        browser = 'chrome'
+        context.options['browser'] = 'chrome'
 
-    if browser == 'firefox':
+    if 'timeout' in context.config.userdata and context.config.userdata['timeout'].isnumeric():
+        context.options['timeout'] = int(context.config.userdata['timeout'])
+    else:
+        context.options['timeout'] = 10
+
+
+def before_scenario(context, scenario):
+    if context.options['browser'] == 'firefox':
         drivers_directory = os.path.dirname(os.path.abspath(__file__)) + "/../drivers"
         os.environ["PATH"] += os.pathsep + drivers_directory
         context.browser = webdriver.Firefox()
-    elif browser == 'chrome':
+    elif context.options['browser'] == 'chrome':
         context.browser = webdriver.Chrome(os.path.dirname(os.path.abspath(__file__)) + "/../drivers/chromedriver")
     else:
-        raise Exception("Try to use unsupported browser: {0}".format(context.config.userdata['BROWSER']))
+        raise Exception("Try to use unsupported browser: {0}".format(context.config.userdata['browser']))
 
     context.browser.maximize_window()
-    context.options = {}
-    context.options['timeout'] = 10
 
 
 def after_scenario(context, scenario):

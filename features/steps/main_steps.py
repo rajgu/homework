@@ -12,11 +12,11 @@ def open_fsecure_web_page(context):
 
 @then("I accept cookies statement")
 def accept_cookies(context):
-	page = FSecureHomePage(context)
-	page.cookie_consent.click()
+    page = FSecureHomePage(context)
+    page.cookie_consent.click()
 
 
 @then("I click on career button")
 def click_on_career_button(context):
-	page = FSecureHomePage(context)
-	page.career_button.click()
+    page = FSecureHomePage(context)
+    page.career_button.click()
